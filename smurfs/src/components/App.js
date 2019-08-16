@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 
 // components
+import SmurfComponent from './SmurfComponent';
 
 // contexts
+import { SmurfContext } from '../contexts/SmurfContext';
 
 // styling
 import "./App.css";
@@ -12,62 +14,15 @@ const App = () => {
   const [smurf, setSmurf] = useState({name: "", age: "", height: ""})
   const [smurfArray, setSmurfArray] = useState([])
 
-  useEffect(() => {
-    axios.get('http://localhost:3333/smurfs')
-      .then(res => {
-        console.log(res.data);
-        setSmurfArray(res.data);
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
-
-  const handleNameChange = e => {
-    setSmurf({ ...smurf, name: e.target.value });
-  }
-  const handleAgeChange = e => {
-    setSmurf({ ...smurf, age: e.target.value });
-  }
-  const handleHeightChange = e => {
-    setSmurf({ ...smurf, height: e.target.value });
-  }
-  const handleSubmit = e => {
-    e.preventDefault();
-    axios.post('http://localhost:3333/smurfs', smurf)
-      .then(res => {
-        console.log(res.data);
-        setSmurfArray(res.data);
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
   return (
-    <div className="App">
-      {console.log(smurf)}
-      <h1>SMURFS! 2.0 W/ Redux</h1>
-      <div>Make Your Own Smurfsona!</div>
-      <br />
-      <form id="myForm" onSubmit={e => handleSubmit(e)}>
-        <label>
-          <input type="text" name="name" placeholder="name" onChange={e => handleNameChange(e)} />
-          <input type="text" name="age" placeholder="age" onChange={e => handleAgeChange(e)} />
-          <input type="text" name="height" placeholder="height" onChange={e => handleHeightChange(e)} />
-        </label>
-        <button className="button">add smurf</button>
-      </form>
-      <div className="cardList">
-        {smurfArray.map(item => (
-          <div key={smurf.id} className="card">
-            <p>name: {item.name}</p>
-            <p>age: {item.age}</p>
-            <p>height: {item.height}</p>
-          </div>
-        ))}
+    <SmurfContext.Provider value={{ smurf, setSmurf, smurfArray, setSmurfArray }}>
+      <div className="App">
+        <h1>SMURFS! 2.0 W/ Redux</h1>
+        <div>Make Your Own Smurfsona!</div>
+        <br />
+        <SmurfComponent />
       </div>
-    </div>
+    </SmurfContext.Provider>
   );
 }
 
