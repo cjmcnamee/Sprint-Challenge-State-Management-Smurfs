@@ -34,10 +34,14 @@ const App = () => {
   }
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(smurf);
-    setSmurf({});
-    setSmurfArray([...smurfArray, smurf]);
-    console.log(smurfArray);
+    axios.post('http://localhost:3333/smurfs', smurf)
+      .then(res => {
+        console.log(res.data);
+        setSmurfArray(res.data);
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   return (
@@ -54,6 +58,15 @@ const App = () => {
         </label>
         <button className="button">add smurf</button>
       </form>
+      <div className="cardList">
+        {smurfArray.map(item => (
+          <div key={smurf.id} className="card">
+            <p>name: {item.name}</p>
+            <p>age: {item.age}</p>
+            <p>height: {item.height}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
