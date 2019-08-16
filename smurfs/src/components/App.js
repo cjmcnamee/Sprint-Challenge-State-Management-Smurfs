@@ -10,10 +10,13 @@ import "./App.css";
 
 const App = () => {
   const [smurf, setSmurf] = useState({name: "", age: "", height: ""})
+  const [smurfArray, setSmurfArray] = useState([])
+
   useEffect(() => {
     axios.get('http://localhost:3333/smurfs')
       .then(res => {
-        console.log(res.data)
+        console.log(res.data);
+        setSmurfArray(res.data);
       })
       .catch(err => {
         console.log(err)
@@ -32,15 +35,16 @@ const App = () => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log(smurf);
+    setSmurf({});
+    setSmurfArray([...smurfArray, smurf]);
+    console.log(smurfArray);
   }
 
   return (
     <div className="App">
       {console.log(smurf)}
       <h1>SMURFS! 2.0 W/ Redux</h1>
-      <div>Welcome to your state management version of Smurfs!</div>
-      <div>Start inside of your `src/index.js` file!</div>
-      <div>Have fun!</div>
+      <div>Make Your Own Smurfsona!</div>
       <br />
       <form id="myForm" onSubmit={e => handleSubmit(e)}>
         <label>
